@@ -18,18 +18,27 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
+    //ctx.drawImage(Resources.get(this.sprite), 0, 65);
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    this.x = 0;
+    this.y = 65;
 };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-function Player(){
+const Player = function() {
     this.sprite = 'images/char-boy.png';
 }
 
+//Initial position of the player:
+let posX = 200;
+let posY = 400;
+
 Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), 110, 80);
+    ctx.drawImage(Resources.get(this.sprite), posX, posY);
+    //this.x = 200;
+    //this.y = 400;
 };
 
 Player.prototype.update = function(dt) {
@@ -38,12 +47,27 @@ Player.prototype.update = function(dt) {
     // all computers.
 };
 
-Player.prototype.handleInput = function(){
+Player.prototype.handleInput = function(e){
+     switch(e.keyCode) {
+        case 37:
+            posX -= 100;
+        break;
+        case 38:
+            posY -= 85;
+        break;
+        case 39:
+            posX += 100;
+        break;
+        case 40:
+            posY += 85;
+        break;   
+     } 
+     
+     ctx.drawImage(Resources.get(this.sprite), posX, posY);
 };
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-
 let enemy = new Enemy();
 //let allEnemies = [];
 let allEnemies = new Array();
@@ -65,4 +89,8 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
-});
+});  
+
+document.addEventListener('keydown',function(e) {
+    player.handleInput(e);
+}, false);
