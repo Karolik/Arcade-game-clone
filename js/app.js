@@ -67,7 +67,7 @@ Player.prototype.handleInput = function(key){
 
 //Reset method: if the player reaches the water, move the player back to the initial location
 Player.prototype.reset = function(){
-    if (this.y <= 65) {
+    if (this.y <= 60) {
         this.x = 200;
         this.y = 400; 
     } 
