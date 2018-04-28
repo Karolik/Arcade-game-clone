@@ -1,10 +1,12 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(x,y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
+    this.x = x;
+    this.y = y;
     this.sprite = 'images/enemy-bug.png';
 };
 
@@ -20,25 +22,22 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     //ctx.drawImage(Resources.get(this.sprite), 0, 65);
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-    this.x = 0;
-    this.y = 65;
+};
+
+Enemy.prototype.checkCollisions = function(){
 };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 const Player = function() {
+    this.x = 200;           //Initial position of the player
+    this.y = 400;
     this.sprite = 'images/char-boy.png';
 }
 
-//Initial position of the player:
-let posX = 200;
-let posY = 400;
-
 Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), posX, posY);
-    //this.x = 200;
-    //this.y = 400;
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y); 
 };
 
 Player.prototype.update = function(dt) {
@@ -47,31 +46,43 @@ Player.prototype.update = function(dt) {
     // all computers.
 };
 
-Player.prototype.handleInput = function(e){
-     switch(e.keyCode) {
-        case 37:
-            posX -= 100;
-        break;
-        case 38:
-            posY -= 85;
-        break;
-        case 39:
-            posX += 100;
-        break;
-        case 40:
-            posY += 85;
-        break;   
-     } 
-     
-     ctx.drawImage(Resources.get(this.sprite), posX, posY);
+Player.prototype.handleInput = function(key){
+    if (key==="left" && this.x <= 400 && this.x > 0){
+        this.x -= 100;
+    };
+    if (key==="up" && this.y <= 400 && this.y > 100){
+        this.y -= 85;
+    };
+    if (key==="right" && this.x < 400 && this.x >= 0){
+        this.x += 100;
+    };
+    if (key==="down" && this.y < 400 && this.y >= 0){
+        this.y += 85;
+    };
+
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    console.log(key);
+    console.log(player);
 };
+
+//Reset method: if the player reaches the water, move the player back to the initial location
+Player.prototype.reset = function(){
+    if (this.y <= 65) {
+        this.x = 200;
+        this.y = 400; 
+    } 
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-let enemy = new Enemy();
+let enemy1 = new Enemy(0, 65);
+let enemy2 = new Enemy(0, 145);
+let enemy3 = new Enemy(0, 145);
+let enemy4 = new Enemy(0, 230);
 //let allEnemies = [];
 let allEnemies = new Array();
-allEnemies.push(enemy);
+allEnemies.push(enemy1, enemy2, enemy3, enemy4);
 console.log(allEnemies);
 
 // Place the player object in a variable called player
@@ -89,8 +100,4 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
-});  
-
-document.addEventListener('keydown',function(e) {
-    player.handleInput(e);
-}, false);
+});
