@@ -67,7 +67,7 @@ Player.prototype.handleInput = function(key){
 
 //Reset method: if the player reaches the water, move the player back to the initial location
 Player.prototype.reset = function(){
-    if (this.y <= 60) {
+    if (this.y <= 50) {
         this.x = 200;
         this.y = 400; 
     } 
@@ -100,4 +100,5 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
+    player.reset();
 });
