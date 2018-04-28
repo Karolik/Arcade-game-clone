@@ -50,7 +50,7 @@ Player.prototype.handleInput = function(key){
     if (key==="left" && this.x <= 400 && this.x > 0){
         this.x -= 100;
     };
-    if (key==="up" && this.y <= 400 && this.y > 100){
+    if (key==="up" && this.y <= 400 && this.y > 0){
         this.y -= 85;
     };
     if (key==="right" && this.x < 400 && this.x >= 0){
@@ -67,7 +67,7 @@ Player.prototype.handleInput = function(key){
 
 //Reset method: if the player reaches the water, move the player back to the initial location
 Player.prototype.reset = function(){
-    if (this.y <= 50) {
+    if (this.y <= 0) {
         this.x = 200;
         this.y = 400; 
     } 
