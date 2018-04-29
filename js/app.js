@@ -19,7 +19,6 @@ Enemy.prototype.update = function(dt) {
     // all computers.    
     if (this.x >= 505) {
         this.x = -100;
-        this.y = 
         this.speed*dt;
     }
     
