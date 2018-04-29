@@ -16,9 +16,10 @@ var Enemy = function(x, y, speed) {
 Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
-    // all computers.
+    // all computers.    
     if (this.x >= 505) {
         this.x = -100;
+        this.y = 
         this.speed*dt;
     }
     
