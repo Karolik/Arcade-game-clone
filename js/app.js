@@ -23,6 +23,7 @@ Enemy.prototype.update = function(dt) {
     }
     
     if (this.x <= 0) {
+        this.speed = Math.floor(Math.random() * 300) + 140;
         this.speed*dt;
     }
     
@@ -92,7 +93,7 @@ Player.prototype.reset = function(){
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-let allEnemies = [new Enemy(0,65,250), new Enemy(0, 145,140), new Enemy(0, 230,190)];
+let allEnemies = [new Enemy(0, 65, 240), new Enemy(0, 145, 150), new Enemy(0, 230, 190)];
 console.log(allEnemies);
 
 // Place the player object in a variable called player
