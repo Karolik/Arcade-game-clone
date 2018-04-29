@@ -60,29 +60,21 @@ Player.prototype.handleInput = function(key){
         this.y += 85;
     };
 
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     console.log(key);
     console.log(player);
 };
 
 //Reset method: if the player reaches the water, move the player back to the initial location
 Player.prototype.reset = function(){
-    if (this.y <= 0) {
+    if (this.y < 0) {
         this.x = 200;
         this.y = 400; 
     } 
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
-let enemy1 = new Enemy(0, 65);
-let enemy2 = new Enemy(0, 145);
-let enemy3 = new Enemy(0, 145);
-let enemy4 = new Enemy(0, 230);
-//let allEnemies = [];
-let allEnemies = new Array();
-allEnemies.push(enemy1, enemy2, enemy3, enemy4);
+let allEnemies = [new Enemy(0,65), new Enemy(0, 145), new Enemy(0,145), new Enemy(0, 230)];
 console.log(allEnemies);
 
 // Place the player object in a variable called player
