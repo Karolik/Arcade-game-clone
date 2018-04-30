@@ -36,9 +36,11 @@ Enemy.prototype.update = function(dt) {
         const dx = player.x - allEnemies[i].x;
         const dy = player.y - allEnemies[i].y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-
+//Reset the player's position when the player colides with an enemy
         if (distance < 40) {
           player.reset();
+          scoreText.result -= 10;
+          if (scoreText.result < 0) scoreText.result = 0;
         }
     }
 };
@@ -65,6 +67,8 @@ Player.prototype.render = function() {
 Player.prototype.update = function() {
     if (this.y < 0){
         player.reset();
+        scoreText.result += 10;
+        //scoreText.setText('Points: '+score);
     }
 };
 
@@ -113,3 +117,30 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+
+//Score of the game
+const Score = function(x, y) {
+    this.x = 0;
+    this.y = 0;
+    this.sprite = 'images/Star.png';
+}
+Score.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+let score = new Score();
+console.log(score);
+
+const ScoreText = function(result, x, y) {
+    this.result = result;
+    this.x = 44;
+    this.y = 110;
+}
+
+ScoreText.prototype.render = function() {
+    ctx.font="18px arial";
+    ctx.fillText(this.result, this.x, this.y);
+};
+
+let scoreText = new ScoreText(0);
