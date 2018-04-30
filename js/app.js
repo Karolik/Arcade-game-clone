@@ -19,6 +19,8 @@ Enemy.prototype.update = function(dt) {
     // all computers.    
     if (this.x >= 505) {
         this.x = -100;
+        let y = [65, 145, 230];
+        this.y = y[Math.floor(Math.random() * y.length)];
         this.speed*dt;
     }
     
@@ -29,12 +31,12 @@ Enemy.prototype.update = function(dt) {
     
     this.x += this.speed*dt;
 
-//Check collisions between the player and enemies :
+//Check for collisions between the player and enemies :
     for (let i = 0; i < allEnemies.length; i++) {
         const dx = player.x - allEnemies[i].x;
         const dy = player.y - allEnemies[i].y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-  
+
         if (distance < 40) {
           player.reset();
         }
@@ -43,7 +45,6 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    //ctx.drawImage(Resources.get(this.sprite), 0, 65);
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
