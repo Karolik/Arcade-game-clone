@@ -63,7 +63,11 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
+       /* document.getElementById('play-again').addEventListener('click', function() {
+            reset();
+        }); */
         reset();
+        //playerSelect();
         lastTime = Date.now();
         main();
     }
@@ -139,7 +143,7 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);  
             }
         }
-
+        ctx.drawImage(Resources.get('images/Star.png'), 0, 0);
         renderEntities();
     }
 
@@ -156,16 +160,68 @@ var Engine = (function(global) {
         });
 
         player.render();
-        score.render();
-        scoreText.render();
+        player.currentScore();
     }
 
+    /* This function 
+     * handle 
+     * It's only called once by the init() method.
+     */
+    function playerSelect() {
+        swal("Choose your player", {
+            width: 600,
+            padding: 100,
+            //background: '#fff url(/images/trees.png)',
+            imageUrl: 'images/char-pink-girl.png',
+            imageWidth: 400,
+            imageHeight: 200,
+            imageAlt: 'Custom image',
+            animation: false,
+            buttons: {
+                boy: {
+                    text: "Boy!",
+                    value: "boy",
+                  },
+              defeat: {
+                text: "Pink girl!",
+                value: "girl1",
+              },
+              catch: {
+                text: "Girl!",
+                value: "girl2",
+              },
+            },
+          })
+          .then((value) => {
+            switch (value) {
+           
+              case "boy":
+                swal("You chose a boy!");
+                break;
+           
+              case "girl1":
+                swal("You chose a girl!");
+                break;
+           
+                case "girl2":
+                swal("You chose a girl!", "success");
+            }
+          });
+    }   
+    
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
+        if (player.score = 20){
+            swal({
+                title: 'Game over!',
+                text: 'Do you want to continue?',
+                icon: "success",
+                button: 'Cool'
+              })
+        } 
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -178,6 +234,10 @@ var Engine = (function(global) {
         'images/grass-block.png',
         'images/enemy-bug.png',
         'images/char-boy.png',
+        'images/char-pink-girl.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-princess-girl.png',
         'images/Star.png'
     ]);
     Resources.onReady(init);
