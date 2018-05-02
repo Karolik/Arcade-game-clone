@@ -36,11 +36,11 @@ Enemy.prototype.update = function(dt) {
         const dx = player.x - allEnemies[i].x;
         const dy = player.y - allEnemies[i].y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-//Reset the player's position when the player colides with an enemy
+
         if (distance < 40) {
-          player.reset();
-          scoreText.result -= 10;
-          if (scoreText.result < 0) scoreText.result = 0;
+          player.reset();       //Reset the player's position when collision
+          player.score -=10;
+          if (player.score < 0) player.score = 0;
         }
     }
 };
@@ -57,19 +57,20 @@ Enemy.prototype.render = function() {
 const Player = function() {
     this.x = 200;           //Initial position of the player
     this.y = 400;
+    this.score = 0;
+    this.char = ['images/char-boy.png', 'images/char-cat-girl.png', 'images/char-horn-girl.png', 'images/char-pink-girl.png', 'images/char-princess-girl.png' ];
     this.sprite = 'images/char-boy.png';
 }
 
 Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y); 
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);    
 };
 
 Player.prototype.update = function() {
     if (this.y < 0){
         player.reset();
-        scoreText.result += 10;
-        //scoreText.setText('Points: '+score);
-    }
+        this.score += 10;
+    }; 
 };
 
 Player.prototype.handleInput = function(key){
@@ -85,8 +86,6 @@ Player.prototype.handleInput = function(key){
     if (key==="down" && this.y < 400 && this.y >= 0){
         this.y += 85;
     };
-
-    console.log(key);
     console.log(player);
 };
 
@@ -94,6 +93,12 @@ Player.prototype.handleInput = function(key){
 Player.prototype.reset = function(){
     this.x = 200;
     this.y = 400;
+};
+
+//Score of the game
+Player.prototype.currentScore = function () {
+    ctx.font="18px arial";
+    ctx.fillText(this.score, 40, 110);
 };
 
 // Now instantiate your objects.
@@ -117,30 +122,3 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
-
-
-//Score of the game
-const Score = function(x, y) {
-    this.x = 0;
-    this.y = 0;
-    this.sprite = 'images/Star.png';
-}
-Score.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
-let score = new Score();
-console.log(score);
-
-const ScoreText = function(result, x, y) {
-    this.result = result;
-    this.x = 44;
-    this.y = 110;
-}
-
-ScoreText.prototype.render = function() {
-    ctx.font="18px arial";
-    ctx.fillText(this.result, this.x, this.y);
-};
-
-let scoreText = new ScoreText(0);
