@@ -161,6 +161,18 @@ var Engine = (function(global) {
 
         player.render();
         player.currentScore();
+        
+        if (player.score === 20){
+            swal({
+                title: "Congratulations! You won!",
+                //text: "With "+ moveCounter.innerText +" moves and "+ starsNumber +" stars!"+"\n"+"Your time is "+time.innerText+"!",
+                type: "success",
+                confirmButtonText: "Play again!",
+            //TODO: When the button is clicked to Play again, the game is restarted   
+            }).then((result) => {
+                document.location.href="";
+            })
+        };
     }
 
     /* This function 
@@ -168,7 +180,7 @@ var Engine = (function(global) {
      * It's only called once by the init() method.
      */
     function playerSelect() {
-        swal("Choose your player", {
+       /* swal("Choose your player", {
             width: 600,
             padding: 100,
             //background: '#fff url(/images/trees.png)',
@@ -206,7 +218,7 @@ var Engine = (function(global) {
                 case "girl2":
                 swal("You chose a girl!", "success");
             }
-          });
+          }); */
     }   
     
     /* This function does nothing but it could have been a good place to
@@ -214,14 +226,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        if (player.score = 20){
-            swal({
-                title: 'Game over!',
-                text: 'Do you want to continue?',
-                icon: "success",
-                button: 'Cool'
-              })
-        } 
+       
     }
 
     /* Go ahead and load all of the images we know we're going to need to
