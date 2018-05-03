@@ -67,7 +67,7 @@ var Engine = (function(global) {
             reset();
         }); */
         reset();
-        //playerSelect();
+        playerSelect();
         lastTime = Date.now();
         main();
     }
@@ -180,45 +180,50 @@ var Engine = (function(global) {
      * It's only called once by the init() method.
      */
     function playerSelect() {
-       /* swal("Choose your player", {
+        swal({
+            title: "Choose your player:",
             width: 600,
             padding: 100,
             //background: '#fff url(/images/trees.png)',
-            imageUrl: 'images/char-pink-girl.png',
-            imageWidth: 400,
-            imageHeight: 200,
+            //imageWidth: 400,
+            //imageHeight: 200,
             imageAlt: 'Custom image',
             animation: false,
-            buttons: {
-                boy: {
-                    text: "Boy!",
-                    value: "boy",
-                  },
-              defeat: {
-                text: "Pink girl!",
-                value: "girl1",
-              },
-              catch: {
-                text: "Girl!",
-                value: "girl2",
-              },
-            },
+            html: "" +
+            "<br>" +
+            '<button type="button" role="button" tabindex="0" class="pinkGirl"><img src="images/char-pink-girl.png" alt="Submit"></button>' +
+            '<button type="button" role="button" tabindex="0" class="boy"><img src="images/char-boy.png" alt="Submit"></button>' +
+            '<button type="button" role="button" tabindex="0" class="catGirl"><img src="images/char-cat-girl.png" alt="Submit"></button>' +
+            '<button type="button" role="button" tabindex="0" class="hornGirl"><img src="images/char-horn-girl.png" alt="Submit"></button>' +
+            '<button type="button" role="button" tabindex="0" class="princessGirl"><img src="images/char-princess-girl.png" alt="Submit"></button>',
+            showCancelButton: false,
+            showConfirmButton: false    
           })
-          .then((value) => {
-            switch (value) {
-           
-              case "boy":
-                swal("You chose a boy!");
-                break;
-           
-              case "girl1":
-                swal("You chose a girl!");
-                break;
-           
-                case "girl2":
-                swal("You chose a girl!", "success");
-            }
-          }); */
+
+        $(document).on('click', '.pinkGirl', function clickConfirm() {
+            player.sprite = 'images/char-pink-girl.png';
+            swal.clickConfirm();
+        });
+
+        $(document).on('click', '.boy', function clickConfirm() {
+            player.sprite = 'images/char-boy.png';
+            swal.clickConfirm();
+        });
+
+        $(document).on('click', '.catGirl', function clickConfirm() {
+            player.sprite = 'images/char-cat-girl.png';
+            swal.clickConfirm();
+        });  
+
+        $(document).on('click', '.hornGirl', function clickConfirm() {
+            player.sprite = 'images/char-horn-girl.png';
+            swal.clickConfirm();
+        });  
+
+        $(document).on('click', '.princessGirl', function clickConfirm() {
+            player.sprite = 'images/char-princess-girl.png';
+            swal.clickConfirm();
+        });  
     }   
     
     /* This function does nothing but it could have been a good place to
