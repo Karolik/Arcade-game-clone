@@ -185,9 +185,6 @@ var Engine = (function(global) {
             width: 600,
             padding: 100,
             //background: '#fff url(/images/trees.png)',
-            //imageWidth: 400,
-            //imageHeight: 200,
-            imageAlt: 'Custom image',
             animation: false,
             html: "" +
             "<br>" +
