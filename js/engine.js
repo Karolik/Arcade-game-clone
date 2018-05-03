@@ -191,11 +191,11 @@ var Engine = (function(global) {
             animation: false,
             html: "" +
             "<br>" +
-            '<button type="button" role="button" tabindex="0" class="pinkGirl"><img src="images/char-pink-girl.png" alt="Submit"></button>' +
-            '<button type="button" role="button" tabindex="0" class="boy"><img src="images/char-boy.png" alt="Submit"></button>' +
-            '<button type="button" role="button" tabindex="0" class="catGirl"><img src="images/char-cat-girl.png" alt="Submit"></button>' +
-            '<button type="button" role="button" tabindex="0" class="hornGirl"><img src="images/char-horn-girl.png" alt="Submit"></button>' +
-            '<button type="button" role="button" tabindex="0" class="princessGirl"><img src="images/char-princess-girl.png" alt="Submit"></button>',
+            '<button type="button" role="button" tabindex="0" class="pinkGirl"><img src="images/char-pink-girl.png" alt="Pink girl submit"></button>' +
+            '<button type="button" role="button" tabindex="0" class="boy"><img src="images/char-boy.png" alt="Boy submit"></button>' +
+            '<button type="button" role="button" tabindex="0" class="catGirl"><img src="images/char-cat-girl.png" alt="Cat girl submit"></button>' +
+            '<button type="button" role="button" tabindex="0" class="hornGirl"><img src="images/char-horn-girl.png" alt="Horn girl"></button>' +
+            '<button type="button" role="button" tabindex="0" class="princessGirl"><img src="images/char-princess-girl.png" alt="Princess girl"></button>',
             showCancelButton: false,
             showConfirmButton: false    
           })
