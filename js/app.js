@@ -84,16 +84,17 @@ Player.prototype.update = function() {
         };
     };    
 
-    if (this.score >= 10){
+    if (this.score === 0){
         Player.prototype.currentScore = function () {
             ctx.font="18px arial";
+            ctx.fillText(this.score, 40, 105);
+        };
+     } else if (this.score >= 10){
+        Player.prototype.currentScore = function () {
             ctx.fillText(this.score, 35, 105);
         };
-    };
-
-    if (this.score >= 100){
+    } else if (this.score >= 100){
         Player.prototype.currentScore = function () {
-            ctx.font="18px arial";
             ctx.fillText(this.score, 30, 105);
         };
     };
