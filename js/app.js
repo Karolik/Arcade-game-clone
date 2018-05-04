@@ -58,7 +58,7 @@ const Player = function() {
     this.x = 200;           //Initial position of the player
     this.y = 400;
     this.score = 0;
-    this.char = ['images/char-boy.png', 'images/char-cat-girl.png', 'images/char-horn-girl.png', 'images/char-pink-girl.png', 'images/char-princess-girl.png' ];
+    //this.char = ['images/char-boy.png', 'images/char-cat-girl.png', 'images/char-horn-girl.png', 'images/char-pink-girl.png', 'images/char-princess-girl.png' ];
     this.sprite = 'images/char-boy.png';
 }
 
@@ -70,7 +70,33 @@ Player.prototype.update = function() {
     if (this.y < 0){
         player.reset();
         this.score += 10;
-    }; 
+
+        if (player.score === 110){
+            swal({
+                title: "Congratulations! You won!",
+                //text: "With "+ m.innerText +"\n"+"Your time is "+time.innerText+"!",
+                type: "success",
+                confirmButtonText: "Play again!",
+            //TODO: When the button is clicked to Play again, the game is restarted   
+            }).then((result) => {
+                document.location.href="";
+            })
+        };
+    };    
+
+    if (this.score >= 10){
+        Player.prototype.currentScore = function () {
+            ctx.font="18px arial";
+            ctx.fillText(this.score, 35, 105);
+        };
+    };
+
+    if (this.score >= 100){
+        Player.prototype.currentScore = function () {
+            ctx.font="18px arial";
+            ctx.fillText(this.score, 30, 105);
+        };
+    };
 };
 
 Player.prototype.handleInput = function(key){
@@ -98,7 +124,7 @@ Player.prototype.reset = function(){
 //Score of the game
 Player.prototype.currentScore = function () {
     ctx.font="18px arial";
-    ctx.fillText(this.score, 40, 110);
+    ctx.fillText(this.score, 40, 105);
 };
 
 // Now instantiate your objects.
