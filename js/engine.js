@@ -143,7 +143,7 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);  
             }
         }
-        ctx.drawImage(Resources.get('images/Star.png'), 0, 0);
+        ctx.drawImage(Resources.get('images/Star.png'), -5, -5);
         renderEntities();
     }
 
@@ -161,18 +161,6 @@ var Engine = (function(global) {
 
         player.render();
         player.currentScore();
-        
-        if (player.score === 20){
-            swal({
-                title: "Congratulations! You won!",
-                //text: "With "+ moveCounter.innerText +" moves and "+ starsNumber +" stars!"+"\n"+"Your time is "+time.innerText+"!",
-                type: "success",
-                confirmButtonText: "Play again!",
-            //TODO: When the button is clicked to Play again, the game is restarted   
-            }).then((result) => {
-                document.location.href="";
-            })
-        };
     }
 
     /* This function 
@@ -181,18 +169,17 @@ var Engine = (function(global) {
      */
     function playerSelect() {
         swal({
-            title: "Choose your player:",
-            width: 600,
-            padding: 100,
-            //background: '#fff url(/images/trees.png)',
+            title: "Arcade Game",
+            width: 550,
+            padding: 50,
             animation: false,
-            html: "" +
+            html: '<h3>Choose your player:</h3>' +
             "<br>" +
-            '<button type="button" role="button" tabindex="0" class="pinkGirl"><img src="images/char-pink-girl.png" alt="Pink girl submit"></button>' +
-            '<button type="button" role="button" tabindex="0" class="boy"><img src="images/char-boy.png" alt="Boy submit"></button>' +
-            '<button type="button" role="button" tabindex="0" class="catGirl"><img src="images/char-cat-girl.png" alt="Cat girl submit"></button>' +
-            '<button type="button" role="button" tabindex="0" class="hornGirl"><img src="images/char-horn-girl.png" alt="Horn girl"></button>' +
-            '<button type="button" role="button" tabindex="0" class="princessGirl"><img src="images/char-princess-girl.png" alt="Princess girl"></button>',
+            '<button type="button" role="button" tabindex="0" class="pinkGirl swalBtn"><img src="images/char-pink-girl.png" alt="Pink girl"></button>' +
+            '<button type="button" role="button" tabindex="0" class="boy swalBtn"><img src="images/char-boy.png" alt="Boy"></button>' +
+            '<button type="button" role="button" tabindex="0" class="catGirl swalBtn"><img src="images/char-cat-girl.png" alt="Cat girl submit"></button>' +
+            '<button type="button" role="button" tabindex="0" class="hornGirl swalBtn"><img src="images/char-horn-girl.png" alt="Horn girl"></button>' +
+            '<button type="button" role="button" tabindex="0" class="princessGirl swalBtn"><img src="images/char-princess-girl.png" alt="Princess girl"></button>',
             showCancelButton: false,
             showConfirmButton: false    
           })
@@ -227,8 +214,7 @@ var Engine = (function(global) {
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
      */
-    function reset() {
-       
+    function reset() {  
     }
 
     /* Go ahead and load all of the images we know we're going to need to
