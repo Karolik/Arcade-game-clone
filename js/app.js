@@ -75,6 +75,10 @@ Player.prototype.update = function() {
 
         if (player.score >= 200){      // When the player achieves 200 points, finish the game
             swal({
+                imageUrl: 'images/winning.png',
+                imageWidth: 300,
+                imageHeight: 200,
+                imageAlt: 'Winning',
                 title: "Congratulations! You won!",
                 type: "success",
                 confirmButtonText: "Play again!",
@@ -181,6 +185,10 @@ Gem.prototype.update = function() {
 
     if (distance === 0 && player.score >= 200) {   // When the player achieves at least 200 points, finish the game
         swal({
+            imageUrl: 'images/winning.png',
+            imageWidth: 300,
+            imageHeight: 200,
+            imageAlt: 'Winning',
             title: "Congratulations! You won!",
             type: "success",
             confirmButtonText: "Play again!",
