@@ -39,7 +39,7 @@ Enemy.prototype.update = function(dt) {
 
         if (distance < 40) {
           player.reset();       //Reset the player's position when collision
-          player.score -=10;
+          player.score -= 10;
           if (player.score < 0) player.score = 0;
         }
     }
@@ -66,21 +66,22 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);    
 };
 
+//When the player reaches water:
 Player.prototype.update = function() {
     if (this.y < 0){
-        player.reset();
-        this.score += 10;
+        player.reset();        //Return the player to the initial position
+        this.score += 10;      //Add 10 points to the score
+        gem.upload();          //Upload a new gem
 
-        if (player.score === 110){
+        if (player.score === 200){      //When the player achieves 200 points, finish the game
             swal({
                 title: "Congratulations! You won!",
-                //text: "With "+ m.innerText +"\n"+"Your time is "+time.innerText+"!",
                 type: "success",
                 confirmButtonText: "Play again!",
-            //TODO: When the button is clicked to Play again, the game is restarted   
+            //When the button is clicked to Play again, the game is restarted   
             }).then((result) => {
                 document.location.href="";
-            })
+            });
         };
     };    
 
@@ -149,3 +150,39 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+const Gem = function () {
+    let x = [0, 100, 200, 300, 400];
+    this.x = x[Math.floor(Math.random() * x.length)]; 
+    let y = [60, 145, 230];
+    this.y = y[Math.floor(Math.random() * y.length)];
+    this.sprite = 'images/Gem Blue.png';
+}
+
+Gem.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);    
+};
+
+//When the player reaches the gem, add 30 points to the score and remove the star
+Gem.prototype.update = function() {
+    const dx = player.x - gem.x;
+    const dy = player.y - gem.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance === 0) {   
+        player.score += 30;
+        this.x = -100;
+        this.y = -100; 
+    };
+};
+
+//Function to upload the gem in a random place on the paved blocks 
+Gem.prototype.upload = function() {
+    let x = [0, 100, 200, 300, 400];
+    this.x = x[Math.floor(Math.random() * x.length)]; 
+    let y = [60, 145, 230];
+    this.y = y[Math.floor(Math.random() * y.length)];
+};
+
+let gem = new Gem;
+console.log(gem);
