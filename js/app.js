@@ -17,30 +17,31 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.    
-    if (this.x >= 505) {
-        this.x = -100;
+    if (this.x >= 505) {        //When the enemy gets outside the canvas
+        this.x = -100;          //bring back the enemy to the beginning of the canvas
         let y = [65, 145, 230];
-        this.y = y[Math.floor(Math.random() * y.length)];
+        this.y = y[Math.floor(Math.random() * y.length)];   //Position the enemy randomly between the 3 rows of paved blocks
         this.speed*dt;
     }
     
     if (this.x <= 0) {
-        this.speed = Math.floor(Math.random() * 300) + 140;
+        this.speed = Math.floor(Math.random() * 300) + 140; // Randomly change the speed of the enemy
         this.speed*dt;
     }
     
     this.x += this.speed*dt;
 
-//Check for collisions between the player and enemies :
+// Check for collisions between the player and the enemies :
     for (let i = 0; i < allEnemies.length; i++) {
         const dx = player.x - allEnemies[i].x;
         const dy = player.y - allEnemies[i].y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
+        // When collision:
         if (distance < 40) {
-          player.reset();       //Reset the player's position when collision
-          player.score -= 10;
-          if (player.score < 0) player.score = 0;
+          player.reset();       // Bring back the player to the initial position
+          player.score -= 10;   // Decrease the score by 10
+          if (player.score < 0) player.score = 0;   // The score cannot be negative
         }
     }
 };
@@ -55,11 +56,10 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 
 const Player = function() {
-    this.x = 200;           //Initial position of the player
+    this.x = 200;           // Initial position of the player
     this.y = 400;
-    this.score = 0;
-    //this.char = ['images/char-boy.png', 'images/char-cat-girl.png', 'images/char-horn-girl.png', 'images/char-pink-girl.png', 'images/char-princess-girl.png' ];
-    this.sprite = 'images/char-boy.png';
+    this.score = 0;         // Initial score
+    this.sprite = 'images/char-boy.png';    // The image/sprite for the player
 }
 
 Player.prototype.render = function() {
@@ -85,22 +85,24 @@ Player.prototype.update = function() {
         };
     };    
 
-    if (this.score === 0) {
+    // Place the number of points exactly in the middle of the star:
+    if (this.score === 0) {                             // When the score is 0,
         Player.prototype.currentScore = function () {
             ctx.font="18px arial";
-            ctx.fillText(this.score, 40, 105);
+            ctx.fillText(this.score, 40, 105);          // the initial coordinates of the score
         };
-     } else if (this.score >= 10 && this.score <100) {
+     } else if (this.score >= 10 && this.score <100) {  // When the score has 2 digits,
         Player.prototype.currentScore = function () {
-            ctx.fillText(this.score, 35, 105);
+            ctx.fillText(this.score, 35, 105);          // move the y coordinate to the left.
         };
-    } else if (this.score >= 100) {
+    } else if (this.score >= 100) {                     // When the score has 3 digits
         Player.prototype.currentScore = function () {
             ctx.fillText(this.score, 30, 105);
         };
     };
 };
 
+// Move the player to the left, right, up, down using the arrow keys:
 Player.prototype.handleInput = function(key){
     if (key==="left" && this.x <= 400 && this.x > 0){
         this.x -= 100;
@@ -151,19 +153,21 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
+// The gem possible to collect by the player to obtain extra points
 const Gem = function () {
-    let x = [0, 100, 200, 300, 400];
-    this.x = x[Math.floor(Math.random() * x.length)]; 
+    let x = [0, 100, 200, 300, 400];                    //Gem appears randomly on the 3 rows of the paved blocks
+    this.x = x[Math.floor(Math.random() * x.length)];   //The x and y coordinates must be able to match the ones of the player 
     let y = [60, 145, 230];
     this.y = y[Math.floor(Math.random() * y.length)];
-    this.sprite = 'images/Gem Blue.png';
+    this.sprite = 'images/Gem Blue.png';                // The sprite/image of the gem
 }
 
+// Draw the gem on the screen
 Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);    
 };
 
-//When the player reaches the gem, add 30 points to the score and remove the star
+//When the player reaches the gem, add 30 points to the score and remove the star off the canvas
 Gem.prototype.update = function() {
     const dx = player.x - gem.x;
     const dy = player.y - gem.y;
@@ -184,5 +188,6 @@ Gem.prototype.upload = function() {
     this.y = y[Math.floor(Math.random() * y.length)];
 };
 
+// Instantiate the gem by placing it in a variable called 'gem'
 let gem = new Gem;
 console.log(gem);
