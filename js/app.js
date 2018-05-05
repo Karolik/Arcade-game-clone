@@ -74,18 +74,7 @@ Player.prototype.update = function() {
         gem.upload();          //Upload a new gem
 
         if (player.score >= 200){      // When the player achieves 200 points, finish the game
-            swal({
-                imageUrl: 'images/winning.png',
-                imageWidth: 300,
-                imageHeight: 200,
-                imageAlt: 'Winning',
-                title: "Congratulations! You won!",
-                type: "success",
-                confirmButtonText: "Play again!",
-            // When the button is clicked to Play again, the game is restarted   
-            }).then((result) => {
-                document.location.href="";
-            });
+           finishGame();
         };
     };
 
@@ -159,11 +148,7 @@ document.addEventListener('keyup', function(e) {
 
 // The gem possible to collect by the player to obtain extra points
 const Gem = function () {
-   /* let x = [0, 100, 200, 300, 400];                    //Gem appears randomly on the 3 rows of the paved blocks
-    this.x = x[Math.floor(Math.random() * x.length)];   //The x and y coordinates must be able to match the ones of the player 
-    let y = [60, 145, 230];
-    this.y = y[Math.floor(Math.random() * y.length)];   */
-    this.sprite = 'images/Gem Blue.png';                // The sprite/image of the gem
+    this.sprite = 'images/Gem Blue.png';      // The sprite/image of the gem
 }
 
 // Draw the gem on the screen
@@ -184,29 +169,34 @@ Gem.prototype.update = function() {
     };
 
     if (distance === 0 && player.score >= 200) {   // When the player achieves at least 200 points, finish the game
-        swal({
-            imageUrl: 'images/winning.png',
-            imageWidth: 300,
-            imageHeight: 200,
-            imageAlt: 'Winning',
-            title: "Congratulations! You won!",
-            type: "success",
-            confirmButtonText: "Play again!",
-        //When the button is clicked to Play again, the game is restarted   
-        }).then((result) => {
-            document.location.href="";
-        });
+        finishGame();
     };
 };
 
 //Function to upload the gem in a random place on the paved blocks 
 Gem.prototype.upload = function() {
     let x = [0, 100, 200, 300, 400];
-    this.x = x[Math.floor(Math.random() * x.length)]; 
-    let y = [60, 145, 230];
+    this.x = x[Math.floor(Math.random() * x.length)];   //Gem appears randomly on the 3 rows of the paved blocks
+    let y = [60, 145, 230];                             //The x and y coordinates must be able to match the ones of the player 
     this.y = y[Math.floor(Math.random() * y.length)];
 };
 
 // Instantiate the gem by placing it in a variable called 'gem'
 let gem = new Gem;
 console.log(gem);
+
+// Popup window, when the game is finished
+function finishGame() {
+    swal({
+        imageUrl: 'images/winning.png',
+        imageWidth: 300,
+        imageHeight: 200,
+        imageAlt: 'Winning',
+        title: "Congratulations! You won!",
+        type: "success",
+        confirmButtonText: "Play again!",
+    //When the button is clicked to Play again, the game is restarted   
+    }).then((result) => {
+        document.location.href="";
+    });
+}
