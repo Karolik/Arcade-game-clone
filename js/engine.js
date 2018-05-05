@@ -176,8 +176,9 @@ var Engine = (function(global) {
             width: 550,
             padding: 50,
             animation: false,
-            html: '<h3>Choose your player:</h3>' +
-            "<br>" +
+            html: 
+            "<strong>Your goal is 200 points! Get 10 points each time you reach the water, 30 points for collecting a gem</strong>" +
+            '<h3>Choose your player:</h3>' +
             '<button type="button" role="button" tabindex="0" class="pinkGirl swalBtn"><img src="images/char-pink-girl.png" alt="Pink girl"></button>' +
             '<button type="button" role="button" tabindex="0" class="boy swalBtn"><img src="images/char-boy.png" alt="Boy"></button>' +
             '<button type="button" role="button" tabindex="0" class="catGirl swalBtn"><img src="images/char-cat-girl.png" alt="Cat girl submit"></button>' +
