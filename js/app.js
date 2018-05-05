@@ -73,17 +73,17 @@ Player.prototype.update = function() {
         this.score += 10;      //Add 10 points to the score
         gem.upload();          //Upload a new gem
 
-        if (player.score === 200){      //When the player achieves 200 points, finish the game
+        if (player.score >= 200){      // When the player achieves 200 points, finish the game
             swal({
                 title: "Congratulations! You won!",
                 type: "success",
                 confirmButtonText: "Play again!",
-            //When the button is clicked to Play again, the game is restarted   
+            // When the button is clicked to Play again, the game is restarted   
             }).then((result) => {
                 document.location.href="";
             });
         };
-    };    
+    };
 
     // Place the number of points exactly in the middle of the star:
     if (this.score === 0) {                             // When the score is 0,
@@ -177,6 +177,17 @@ Gem.prototype.update = function() {
         player.score += 30;
         this.x = -100;
         this.y = -100; 
+    };
+
+    if (distance === 0 && player.score >= 200) {   // When the player achieves at least 200 points, finish the game
+        swal({
+            title: "Congratulations! You won!",
+            type: "success",
+            confirmButtonText: "Play again!",
+        //When the button is clicked to Play again, the game is restarted   
+        }).then((result) => {
+            document.location.href="";
+        });
     };
 };
 
