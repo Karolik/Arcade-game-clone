@@ -155,10 +155,10 @@ document.addEventListener('keyup', function(e) {
 
 // The gem possible to collect by the player to obtain extra points
 const Gem = function () {
-    let x = [0, 100, 200, 300, 400];                    //Gem appears randomly on the 3 rows of the paved blocks
+   /* let x = [0, 100, 200, 300, 400];                    //Gem appears randomly on the 3 rows of the paved blocks
     this.x = x[Math.floor(Math.random() * x.length)];   //The x and y coordinates must be able to match the ones of the player 
     let y = [60, 145, 230];
-    this.y = y[Math.floor(Math.random() * y.length)];
+    this.y = y[Math.floor(Math.random() * y.length)];   */
     this.sprite = 'images/Gem Blue.png';                // The sprite/image of the gem
 }
 
