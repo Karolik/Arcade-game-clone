@@ -1,204 +1,249 @@
-// Enemies our player must avoid
-var Enemy = function(x, y, speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+/* Engine.js
+ * This file provides the game loop functionality (update entities and render),
+ * draws the initial game board on the screen, and then calls the update and
+ * render methods on your player and enemy objects (defined in your app.js).
+ *
+ * A game engine works by drawing the entire game screen over and over, kind of
+ * like a flipbook you may have created as a kid. When your player moves across
+ * the screen, it may look like just that image/character is moving or being
+ * drawn but that is not the case. What's really happening is the entire "scene"
+ * is being drawn over and over, presenting the illusion of animation.
+ *
+ * This engine makes the canvas' context (ctx) object globally available to make 
+ * writing app.js a little simpler to work with.
+ */
 
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.x = x;
-    this.y = y;
-    this.speed = speed;
-    this.sprite = 'images/enemy-bug.png';
-};
+var Engine = (function(global) {
+    /* Predefine the variables we'll be using within this scope,
+     * create the canvas element, grab the 2D context for that canvas
+     * set the canvas elements height/width and add it to the DOM.
+     */
+    var doc = global.document,
+        win = global.window,
+        canvas = doc.createElement('canvas'),
+        ctx = canvas.getContext('2d'),
+        lastTime;
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.    
-    if (this.x >= 505) { //When the enemy gets outside the canvas
-        this.x = -100; //bring back the enemy to the beginning of the canvas
-        let y = [65, 145, 230];
-        this.y = y[Math.floor(Math.random() * y.length)]; //Position the enemy randomly between the 3 rows of paved blocks
-        this.speed*dt;
+    canvas.width = 505;
+    canvas.height = 606;
+    doc.body.appendChild(canvas);
+
+    /* This function serves as the kickoff point for the game loop itself
+     * and handles properly calling the update and render methods.
+     */
+    function main() {
+        /* Get our time delta information which is required if your game
+         * requires smooth animation. Because everyone's computer processes
+         * instructions at different speeds we need a constant value that
+         * would be the same for everyone (regardless of how fast their
+         * computer is) - hurray time!
+         */
+        var now = Date.now(),
+            dt = (now - lastTime) / 1000.0;
+
+        /* Call our update/render functions, pass along the time delta to
+         * our update function since it may be used for smooth animation.
+         */
+        update(dt);
+        render();
+
+        /* Set our lastTime variable which is used to determine the time delta
+         * for the next time this function is called.
+         */
+        lastTime = now;
+
+        /* Use the browser's requestAnimationFrame function to call this
+         * function again as soon as the browser is able to draw another frame.
+         */
+        win.requestAnimationFrame(main);
     }
+
+    /* This function does some initial setup that should only occur once,
+     * particularly setting the lastTime variable that is required for the
+     * game loop.
+     */
+    function init() {
+        reset();
+        playerSelect();
+        lastTime = Date.now();
+        main();
+    }
+
+    /* This function is called by main (our game loop) and itself calls all
+     * of the functions which may need to update entity's data. Based on how
+     * you implement your collision detection (when two entities occupy the
+     * same space, for instance when your character should die), you may find
+     * the need to add an additional function call here. For now, we've left
+     * it commented out - you may or may not want to implement this
+     * functionality this way (you could just implement collision detection
+     * on the entities themselves within your app.js file).
+     */
+    function update(dt) {
+        updateEntities(dt);
+        //checkCollisions();
+    }
+
+    /* This is called by the update function and loops through all of the
+     * objects within your allEnemies array as defined in app.js and calls
+     * their update() methods. It will then call the update function for your
+     * player object. These update methods should focus purely on updating
+     * the data/properties related to the object. Do your drawing in your
+     * render methods.
+     */
+    function updateEntities(dt) {
+        allEnemies.forEach(function(enemy) {
+            enemy.update(dt);
+        });
+
+        player.update();
+        gem.update();
+    }
+
+    /* This function initially draws the "game level", it will then call
+     * the renderEntities function. Remember, this function is called every
+     * game tick (or loop of the game engine) because that's how games work -
+     * they are flipbooks creating the illusion of animation but in reality
+     * they are just drawing the entire screen over and over.
+     */
+    function render() {
+        /* This array holds the relative URL to the image used
+         * for that particular row of the game level.
+         */
+        var rowImages = [
+                'images/water-block.png',   // Top row is water
+                'images/stone-block.png',   // Row 1 of 3 of stone
+                'images/stone-block.png',   // Row 2 of 3 of stone
+                'images/stone-block.png',   // Row 3 of 3 of stone
+                'images/grass-block.png',   // Row 1 of 2 of grass
+                'images/grass-block.png'    // Row 2 of 2 of grass
+            ],
+            numRows = 6,
+            numCols = 5,
+            row, col;
+        
+        // Before drawing, clear existing canvas
+        ctx.clearRect(0,0,canvas.width,canvas.height)
+
+        /* Loop through the number of rows and columns we've defined above
+         * and, using the rowImages array, draw the correct image for that
+         * portion of the "grid"
+         */
+        
+
+        for (row = 0; row < numRows; row++) {
+            for (col = 0; col < numCols; col++) {
+                /* The drawImage function of the canvas' context element
+                 * requires 3 parameters: the image to draw, the x coordinate
+                 * to start drawing and the y coordinate to start drawing.
+                 * We're using our Resources helpers to refer to our images
+                 * so that we get the benefits of caching these images, since
+                 * we're using them over and over.
+                 */
+                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);  
+            }
+        }
+        // Draw a star on the canvas
+        ctx.drawImage(Resources.get('images/Star.png'), -5, -5);
+        renderEntities();
+    }
+
+    /* This function is called by the render function and is called on each game
+     * tick. Its purpose is to then call the render functions you have defined
+     * on your enemy and player entities within app.js
+     */
+    function renderEntities() {
+        /* Loop through all of the objects within the allEnemies array and call
+         * the render function you have defined.
+         */
+        allEnemies.forEach(function(enemy) {
+            enemy.render();
+        });
+        // Call the render function of the player and the gem.
+        gem.render();
+        player.render();
+        // Call the function to show the score
+        player.currentScore();
+        
+    }
+
+    /* This function is to create a popup window 
+     * where you can select the image of the player before the game.
+     * It's only called once by the init() method.
+     */
+    function playerSelect() {
+        swal({
+            title: "Arcade Game",
+            width: 550,
+            padding: 50,
+            animation: false,
+            html: 
+            "<strong>Your goal is 200 points! Get 10 points each time you reach the water, 30 points for collecting a gem</strong>" +
+            '<h3>Choose your player:</h3>' +
+            '<button type="button" role="button" tabindex="0" class="pinkGirl swalBtn"><img src="images/char-pink-girl.png" alt="Pink girl"></button>' +
+            '<button type="button" role="button" tabindex="0" class="boy swalBtn"><img src="images/char-boy.png" alt="Boy"></button>' +
+            '<button type="button" role="button" tabindex="0" class="catGirl swalBtn"><img src="images/char-cat-girl.png" alt="Cat girl submit"></button>' +
+            '<button type="button" role="button" tabindex="0" class="hornGirl swalBtn"><img src="images/char-horn-girl.png" alt="Horn girl"></button>' +
+            '<button type="button" role="button" tabindex="0" class="princessGirl swalBtn"><img src="images/char-princess-girl.png" alt="Princess girl"></button>',
+            showCancelButton: false,
+            showConfirmButton: false    
+          })
+
+        $(document).on('click', '.pinkGirl', function clickConfirm() {
+            player.sprite = 'images/char-pink-girl.png';
+            swal.clickConfirm();
+        });
+
+        $(document).on('click', '.boy', function clickConfirm() {
+            player.sprite = 'images/char-boy.png';
+            swal.clickConfirm();
+        });
+
+        $(document).on('click', '.catGirl', function clickConfirm() {
+            player.sprite = 'images/char-cat-girl.png';
+            swal.clickConfirm();
+        });  
+
+        $(document).on('click', '.hornGirl', function clickConfirm() {
+            player.sprite = 'images/char-horn-girl.png';
+            swal.clickConfirm();
+        });  
+
+        $(document).on('click', '.princessGirl', function clickConfirm() {
+            player.sprite = 'images/char-princess-girl.png';
+            swal.clickConfirm();
+        });  
+    }   
     
-    if (this.x <= 0) {
-        this.speed = Math.floor(Math.random() * 300) + 140; // Randomly change the speed of the enemy
-        this.speed*dt;
-    }
-    
-    this.x += this.speed*dt;
-
-// Check for collisions between the player and the enemies:
-    for (let i = 0; i < allEnemies.length; i++) {
-        const dx = player.x - allEnemies[i].x;
-        const dy = player.y - allEnemies[i].y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        // When collision:
-        if (distance < 40) {
-          player.reset(); // Bring back the player to the initial position
-          player.score -= 10; // Decrease the score by 10
-          if (player.score < 0) player.score = 0; // The score cannot be negative
-        }
-    }
-}
-
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
-
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-
-const Player = function() {
-    this.x = 200; // Initial position of the player
-    this.y = 400;
-    this.score = 0; // Initial score
-    this.sprite = 'images/char-boy.png'; // The image/sprite for the player
-}
-
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);    
-}
-
-//When the player reaches water:
-Player.prototype.update = function() {
-    if (this.y < 0) {
-        player.reset(); //Return the player to the initial position
-        this.score += 10; //Add 10 points to the score
-        gem.upload(); //Upload a new gem
-
-        if (player.score >= 200) { // When the player achieves 200 points, finish the game
-           finishGame();
-        }
+    /* This function does nothing but it could have been a good place to
+     * handle game reset states - maybe a new game menu or a game over screen
+     * those sorts of things. It's only called once by the init() method.
+     */
+    function reset() {  
     }
 
-    // Place the number of points exactly in the middle of the star:
-    if (this.score === 0) { // When the score is 0,
-        Player.prototype.currentScore = function () {
-            ctx.font="18px arial";
-            ctx.fillText(this.score, 40, 105); // the initial coordinates of the score
-        }
-     } else if (this.score >= 10 && this.score <100) { // When the score has 2 digits,
-        Player.prototype.currentScore = function () {
-            ctx.fillText(this.score, 35, 105); // move the y coordinate to the left.
-        }
-    } else if (this.score >= 100) { // When the score has 3 digits
-        Player.prototype.currentScore = function () {
-            ctx.fillText(this.score, 30, 105);
-        }
-    }
-}
+    /* Go ahead and load all of the images we know we're going to need to
+     * draw our game level. Then set init as the callback method, so that when
+     * all of these images are properly loaded our game will start.
+     */
+    Resources.load([
+        'images/stone-block.png',
+        'images/water-block.png',
+        'images/grass-block.png',
+        'images/enemy-bug.png',
+        'images/char-boy.png',
+        'images/char-pink-girl.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-princess-girl.png',
+        'images/Star.png',
+        'images/Selector.png',
+        'images/Gem Blue.png'
+    ]);
+    Resources.onReady(init);
 
-// Move the player to the left, right, up, down using the arrow keys:
-Player.prototype.handleInput = function(key) {
-    if (key==="left" && this.x <= 400 && this.x > 0) {
-        this.x -= 100;
-    }
-    if (key==="up" && this.y <= 400 && this.y > 0) {
-        this.y -= 85;
-    }
-    if (key==="right" && this.x < 400 && this.x >= 0) {
-        this.x += 100;
-    }
-    if (key==="down" && this.y < 400 && this.y >= 0) {
-        this.y += 85;
-    }
-    console.log(player);
-}
-
-//Reset method: if the player reaches the water, move the player back to the initial location
-Player.prototype.reset = function() {
-    this.x = 200;
-    this.y = 400;
-}
-
-//Score of the game
-Player.prototype.currentScore = function () {
-    ctx.font="18px arial";
-    ctx.fillText(this.score, 40, 105);
-}
-
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-let allEnemies = [new Enemy(0, 65, 240), new Enemy(0, 145, 150), new Enemy(0, 230, 190)];
-console.log(allEnemies);
-
-// Place the player object in a variable called player
-let player = new Player();
-console.log(player);
-
-// This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
-
-    player.handleInput(allowedKeys[e.keyCode]);
-});
-
-// The gem possible to collect by the player to obtain extra points
-const Gem = function () {
-    this.sprite = 'images/Gem Blue.png'; // The sprite/image of the gem
-}
-
-// Draw the gem on the screen
-Gem.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);    
-};
-
-//When the player reaches the gem, add 30 points to the score and remove the star off the canvas
-Gem.prototype.update = function() {
-    const dx = player.x - gem.x;
-    const dy = player.y - gem.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance === 0) {   
-        player.score += 30;
-        this.x = -100;
-        this.y = -100; 
-    }
-
-    if (distance === 0 && player.score >= 200) { // When the player achieves at least 200 points, finish the game
-        finishGame();
-    }
-}
-
-// Function to upload the gem in a random place on the paved blocks 
-// Gem appears randomly on the 3 rows of the paved blocks
-// The x and y coordinates must be able to match the ones of the player
-Gem.prototype.upload = function() {
-    let x = [0, 100, 200, 300, 400];
-    this.x = x[Math.floor(Math.random() * x.length)]; 
-    let y = [60, 145, 230];  
-    this.y = y[Math.floor(Math.random() * y.length)];
-}
-
-// Instantiate the gem by placing it in a variable called 'gem'
-let gem = new Gem;
-console.log(gem);
-
-// Popup window, when the game is finished
-function finishGame() {
-    swal({
-        imageUrl: 'images/winning.png',
-        imageWidth: 300,
-        imageHeight: 200,
-        imageAlt: 'Winning',
-        title: "Congratulations! You won!",
-        type: "success",
-        confirmButtonText: "Play again!",
-    //When the button is clicked to Play again, the game is restarted   
-    }).then((result) => {
-        document.location.href="";
-    });
-}
+    /* Assign the canvas' context object to the global variable (the window
+     * object when run in a browser) so that developers can use it more easily
+     * from within their app.js files.
+     */
+    global.ctx = ctx;
+})(this);
