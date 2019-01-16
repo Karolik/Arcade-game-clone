@@ -1,5 +1,4 @@
 # Arcade-game-clone
-frontend-nanodegree-arcade-game
 ===============================
 
 In this game there is a Player and Enemies (Bugs). The goal of the player is to reach the water, without colliding into any one of the enemies. 
@@ -8,7 +7,7 @@ In this game there is a Player and Enemies (Bugs). The goal of the player is to 
 
 * [Instructions](#instructions)
 * [Prerequisites](#prerequisites)
-* [Languages used to build the game](#languages_used_to_build_the_game)
+* [Languages used to build the game](#languages-used-to-build-the-game)
 * [Contributing](#contributing)
 * [Authors](#authors)
 * [License](#license)
